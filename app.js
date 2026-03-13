@@ -120,11 +120,7 @@ async function loadPlaylists() {
 }
 
 async function fetchPodcastEpisodes(podcast, episodeLimit) {
-  const endpoint = `${API_BASE}/shows/${encodeURIComponent(
-    podcast.id
-  )}/episodes?market=US&limit=${episodeLimit}`;
-  const data = await fetchSpotify(endpoint);
-  const items = Array.isArray(data.items) ? data.items.slice(0, episodeLimit) : [];
+  const items = await fetchShowEpisodes(podcast.id, episodeLimit);
 
   const panel = document.createElement("article");
   panel.className = pageType === "kids" ? "panel panel-kids panel-collapsible" : "panel panel-collapsible";
@@ -162,6 +158,30 @@ async function fetchPodcastEpisodes(podcast, episodeLimit) {
   setupCollapsibleCard(panel, button, body);
 
   return panel;
+}
+
+async function fetchShowEpisodes(showId, desiredCount) {
+  const pageSize = Math.min(desiredCount, 50);
+  let offset = 0;
+  let items = [];
+
+  while (items.length < desiredCount) {
+    const endpoint = `${API_BASE}/shows/${encodeURIComponent(
+      showId
+    )}/episodes?market=US&limit=${pageSize}&offset=${offset}`;
+    const data = await fetchSpotify(endpoint);
+    const batch = Array.isArray(data.items) ? data.items : [];
+
+    items = items.concat(batch);
+
+    if (!batch.length || !data.next) {
+      break;
+    }
+
+    offset += batch.length;
+  }
+
+  return items.slice(0, desiredCount);
 }
 
 async function fetchPlaylist(playlist) {
