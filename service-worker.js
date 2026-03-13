@@ -1,4 +1,4 @@
-const STATIC_CACHE = "spotify-lite-static-v1";
+const STATIC_CACHE = "spotify-lite-static-v2";
 const APP_ASSETS = [
   "./",
   "./index.html",
