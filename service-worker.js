@@ -1,7 +1,8 @@
-const STATIC_CACHE = "spotify-lite-static-v2";
+const STATIC_CACHE = "spotify-lite-static-v3";
 const APP_ASSETS = [
   "./",
   "./index.html",
+  "./kids.html",
   "./styles.css",
   "./app.js",
   "./config.js",
