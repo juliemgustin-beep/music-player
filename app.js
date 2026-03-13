@@ -1,5 +1,4 @@
 const API_BASE = "https://api.spotify.com/v1";
-<<<<<<< HEAD
 const HOME_EPISODE_LIMIT = 3;
 const KIDS_EPISODE_LIMIT = 100;
 const DATA_CACHE_VERSION = "spotify-lite-data-v3";
@@ -9,14 +8,6 @@ const pageType = document.body.dataset.page || "home";
 const podcastsRoot = document.getElementById("podcasts");
 const playlistsRoot = document.getElementById("playlists");
 let expandedPodcastCard = null;
-=======
-const EPISODE_LIMIT = 5;
-const DATA_CACHE_VERSION = "spotify-lite-data-v2";
-const TOKEN_CACHE_KEY = "spotify-lite-token-cache";
-
-const podcastsRoot = document.getElementById("podcasts");
-const playlistsRoot = document.getElementById("playlists");
->>>>>>> 719dd2b (Build Spotify Lite)
 
 bootstrap();
 
@@ -24,7 +15,6 @@ async function bootstrap() {
   registerServiceWorker();
 
   if (!Array.isArray(PODCASTS) || !Array.isArray(PLAYLISTS)) {
-<<<<<<< HEAD
     if (podcastsRoot) {
       renderStateCard(
         podcastsRoot,
@@ -37,21 +27,10 @@ async function bootstrap() {
         "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
       );
     }
-=======
-    renderStateCard(
-      podcastsRoot,
-      "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
-    );
-    renderStateCard(
-      playlistsRoot,
-      "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
-    );
->>>>>>> 719dd2b (Build Spotify Lite)
     return;
   }
 
   if (!hasSpotifyAuthConfig()) {
-<<<<<<< HEAD
     if (podcastsRoot) {
       renderStateCard(
         podcastsRoot,
@@ -96,26 +75,6 @@ async function loadPodcasts(groupName, episodeLimit) {
   if (!podcastsRoot) {
     return;
   }
-=======
-    renderPodcastGroupsSkeleton(
-      "Add a Cloudflare Worker token endpoint in config.js to load this group automatically."
-    );
-    renderStateCard(
-      playlistsRoot,
-      "Add a Cloudflare Worker token endpoint in config.js to load your curated playlists."
-    );
-    return;
-  }
-
-  renderStateCard(podcastsRoot, "Loading podcasts...");
-  renderStateCard(playlistsRoot, "Loading playlists...");
-
-  await Promise.all([loadPodcasts(), loadPlaylists()]);
-}
-
-async function loadPodcasts() {
-  const curated = PODCASTS.filter((podcast) => podcast.id && podcast.group);
->>>>>>> 719dd2b (Build Spotify Lite)
 
   if (!curated.length) {
     renderStateCard(podcastsRoot, "Add podcast IDs in config.js to populate this section.");
@@ -123,30 +82,10 @@ async function loadPodcasts() {
   }
 
   try {
-<<<<<<< HEAD
     const cards = await Promise.all(
       curated.map((podcast) => fetchPodcastEpisodes(podcast, episodeLimit))
     );
     podcastsRoot.replaceChildren(...cards);
-=======
-    const cards = await Promise.all(curated.map(fetchPodcastEpisodes));
-    const cardsByGroup = new Map();
-
-    cards.forEach((card, index) => {
-      const podcast = curated[index];
-      if (!cardsByGroup.has(podcast.group)) {
-        cardsByGroup.set(podcast.group, []);
-      }
-      cardsByGroup.get(podcast.group).push(card);
-    });
-
-    const groups = [];
-    for (const [groupName, groupCards] of cardsByGroup.entries()) {
-      groups.push(buildPodcastGroup(groupName, groupCards));
-    }
-
-    podcastsRoot.replaceChildren(...groups);
->>>>>>> 719dd2b (Build Spotify Lite)
   } catch (error) {
     console.error(error);
     renderStateCard(
@@ -159,13 +98,10 @@ async function loadPodcasts() {
 async function loadPlaylists() {
   const curated = PLAYLISTS.filter((playlist) => playlist.id);
 
-<<<<<<< HEAD
   if (!playlistsRoot) {
     return;
   }
 
-=======
->>>>>>> 719dd2b (Build Spotify Lite)
   if (!curated.length) {
     renderStateCard(playlistsRoot, "Add playlist IDs in config.js to populate this section.");
     return;
@@ -183,7 +119,6 @@ async function loadPlaylists() {
   }
 }
 
-<<<<<<< HEAD
 async function fetchPodcastEpisodes(podcast, episodeLimit) {
   const endpoint = `${API_BASE}/shows/${encodeURIComponent(
     podcast.id
@@ -215,30 +150,6 @@ async function fetchPodcastEpisodes(podcast, episodeLimit) {
 
   const episodeList = document.createElement("div");
   episodeList.className = pageType === "kids" ? "episode-list episode-list-kids" : "episode-list";
-=======
-async function fetchPodcastEpisodes(podcast) {
-  const endpoint = `${API_BASE}/shows/${encodeURIComponent(
-    podcast.id
-  )}/episodes?market=US&limit=${EPISODE_LIMIT}`;
-  const data = await fetchSpotify(endpoint);
-  const items = Array.isArray(data.items) ? data.items.slice(0, EPISODE_LIMIT) : [];
-
-  const panel = document.createElement("article");
-  panel.className = "panel";
-
-  const firstEpisode = items[0];
-  panel.append(
-    buildPanelHead({
-      title: podcast.name,
-      subtitle: firstEpisode?.show?.publisher || "Latest episodes",
-      imageUrl: firstEpisode?.images?.[0]?.url || "",
-      fallbackText: podcast.name
-    })
-  );
-
-  const episodeList = document.createElement("div");
-  episodeList.className = "episode-list";
->>>>>>> 719dd2b (Build Spotify Lite)
 
   if (!items.length) {
     episodeList.appendChild(makeStateCard("No episodes were returned for this podcast."));
@@ -246,14 +157,10 @@ async function fetchPodcastEpisodes(podcast) {
     items.forEach((episode) => episodeList.appendChild(buildEpisodeLink(episode)));
   }
 
-<<<<<<< HEAD
   body.appendChild(episodeList);
   panel.append(button, body);
   setupCollapsibleCard(panel, button, body);
 
-=======
-  panel.appendChild(episodeList);
->>>>>>> 719dd2b (Build Spotify Lite)
   return panel;
 }
 
@@ -270,12 +177,8 @@ async function fetchPlaylist(playlist) {
       title: data.name || playlist.name,
       subtitle: `${data.tracks?.total || 0} tracks`,
       imageUrl: data.images?.[0]?.url || "",
-<<<<<<< HEAD
       fallbackText: playlist.name,
       collapsible: false
-=======
-      fallbackText: playlist.name
->>>>>>> 719dd2b (Build Spotify Lite)
     })
   );
 
@@ -300,7 +203,6 @@ async function fetchPlaylist(playlist) {
   return panel;
 }
 
-<<<<<<< HEAD
 function setupCollapsibleCard(panel, button, body) {
   button.addEventListener("click", () => {
     const isExpanded = panel.classList.contains("is-expanded");
@@ -359,8 +261,6 @@ function collapsePodcastCard(panel, button, body) {
   body.addEventListener("transitionend", onCollapseEnd);
 }
 
-=======
->>>>>>> 719dd2b (Build Spotify Lite)
 async function fetchSpotify(url) {
   const cached = readCachedResponse(url);
   if (cached) {
@@ -420,51 +320,9 @@ function hasSpotifyAuthConfig() {
   return Boolean(SPOTIFY_ACCESS_TOKEN || SPOTIFY_TOKEN_ENDPOINT);
 }
 
-<<<<<<< HEAD
 function buildPanelHead({ title, subtitle, imageUrl, fallbackText, collapsible }) {
   const head = document.createElement("div");
   head.className = collapsible ? "panel-head panel-head-collapsible" : "panel-head";
-=======
-function renderPodcastGroupsSkeleton(message) {
-  const groups = groupPodcasts(PODCASTS.filter((podcast) => podcast.id && podcast.group));
-  const sections = Array.from(groups.entries()).map(([groupName]) =>
-    buildPodcastGroup(groupName, [makeStateCard(message)])
-  );
-
-  podcastsRoot.replaceChildren(...sections);
-}
-
-function buildPodcastGroup(groupName, cards) {
-  const section = document.createElement("section");
-  section.className = "podcast-group";
-
-  const heading = document.createElement("h3");
-  heading.className = "podcast-group-title";
-  heading.textContent = groupName;
-  section.appendChild(heading);
-
-  const grid = document.createElement("div");
-  grid.className = "card-grid";
-  grid.append(...cards);
-  section.appendChild(grid);
-
-  return section;
-}
-
-function groupPodcasts(podcasts) {
-  return podcasts.reduce((groups, podcast) => {
-    if (!groups.has(podcast.group)) {
-      groups.set(podcast.group, []);
-    }
-    groups.get(podcast.group).push(podcast);
-    return groups;
-  }, new Map());
-}
-
-function buildPanelHead({ title, subtitle, imageUrl, fallbackText }) {
-  const head = document.createElement("div");
-  head.className = "panel-head";
->>>>>>> 719dd2b (Build Spotify Lite)
 
   if (imageUrl) {
     const image = document.createElement("img");
@@ -482,17 +340,13 @@ function buildPanelHead({ title, subtitle, imageUrl, fallbackText }) {
   }
 
   const text = document.createElement("div");
-<<<<<<< HEAD
   text.className = "panel-head-copy";
-=======
->>>>>>> 719dd2b (Build Spotify Lite)
   text.innerHTML = `
     <h3 class="panel-title">${escapeHtml(title)}</h3>
     <p class="panel-copy">${escapeHtml(subtitle)}</p>
   `;
   head.appendChild(text);
 
-<<<<<<< HEAD
   if (collapsible) {
     const chevron = document.createElement("span");
     chevron.className = "chevron";
@@ -501,18 +355,12 @@ function buildPanelHead({ title, subtitle, imageUrl, fallbackText }) {
     head.appendChild(chevron);
   }
 
-=======
->>>>>>> 719dd2b (Build Spotify Lite)
   return head;
 }
 
 function buildEpisodeLink(episode) {
   const link = document.createElement("a");
-<<<<<<< HEAD
   link.className = pageType === "kids" ? "tap-card tap-card-kids" : "tap-card";
-=======
-  link.className = "tap-card";
->>>>>>> 719dd2b (Build Spotify Lite)
   link.href = episode.external_urls?.spotify || `https://open.spotify.com/episode/${episode.id}`;
   link.target = "_blank";
   link.rel = "noreferrer";
