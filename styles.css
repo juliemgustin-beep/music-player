@@ -41,14 +41,26 @@ img {
   display: block;
 }
 
+button {
+  font: inherit;
+}
+
 .app-shell {
   width: min(100%, var(--content-width));
   margin: 0 auto;
   padding: 14px 12px 32px;
 }
 
+.app-shell-kids {
+  --content-width: 430px;
+}
+
 .hero {
   padding: 8px 2px 16px;
+}
+
+.hero-kids {
+  padding-top: 4px;
 }
 
 .eyebrow {
@@ -73,6 +85,15 @@ img {
   color: var(--muted);
   font-size: 0.92rem;
   line-height: 1.42;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 12px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  text-decoration: none;
 }
 
 .section {
@@ -102,9 +123,9 @@ img {
   gap: 10px;
 }
 
+.nav-card,
 .panel,
-.state-card,
-.instruction-card {
+.state-card {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
@@ -112,8 +133,53 @@ img {
   backdrop-filter: blur(16px);
 }
 
+.nav-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  text-decoration: none;
+}
+
+.nav-copy {
+  min-width: 0;
+}
+
+.nav-copy strong {
+  display: block;
+  font-size: 0.98rem;
+  line-height: 1.2;
+}
+
+.nav-copy span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
 .panel {
   overflow: hidden;
+}
+
+.panel-kids {
+  background: rgba(255, 255, 255, 0.045);
+}
+
+.panel-collapsible.is-expanded {
+  border-color: rgba(30, 215, 96, 0.22);
+}
+
+.panel-toggle {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
 }
 
 .panel-head {
@@ -121,6 +187,39 @@ img {
   align-items: center;
   gap: 10px;
   padding: 14px;
+}
+
+.panel-head-collapsible {
+  min-height: 76px;
+}
+
+.panel-head-copy {
+  min-width: 0;
+  flex: 1;
+}
+
+.chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    color 180ms ease;
+}
+
+.panel-collapsible.is-expanded .chevron {
+  transform: rotate(45deg);
+  background: rgba(30, 215, 96, 0.14);
+  color: var(--accent);
 }
 
 .artwork {
@@ -153,11 +252,21 @@ img {
   line-height: 1.28;
 }
 
+.panel-body {
+  height: 0;
+  overflow: hidden;
+  transition: height 220ms ease;
+}
+
 .episode-list,
 .playlist-wrap {
   display: grid;
   gap: 8px;
   padding: 0 14px 14px;
+}
+
+.episode-list-kids {
+  gap: 7px;
 }
 
 .tap-card,
@@ -179,10 +288,20 @@ img {
     border-color 160ms ease;
 }
 
+.tap-card-kids {
+  align-items: flex-start;
+  padding-top: 11px;
+  padding-bottom: 11px;
+}
+
 .tap-card:hover,
 .tap-card:focus-visible,
 .playlist-link:hover,
-.playlist-link:focus-visible {
+.playlist-link:focus-visible,
+.nav-card:hover,
+.nav-card:focus-visible,
+.back-link:focus-visible,
+.panel-toggle:focus-visible {
   transform: translateY(-1px);
   background: var(--surface-strong);
   border-color: rgba(30, 215, 96, 0.24);
@@ -221,66 +340,11 @@ img {
   margin-left: 4px;
 }
 
-.state-card,
-.instruction-card {
-  padding: 14px;
-}
-
 .state-card {
+  padding: 14px;
   color: var(--muted);
   font-size: 0.84rem;
   line-height: 1.4;
-}
-
-.instruction-card + .instruction-card {
-  margin-top: 10px;
-}
-
-.instruction-card h3 {
-  margin: 0 0 8px;
-  font-size: 0.96rem;
-}
-
-.instruction-card p,
-.instruction-card li {
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.45;
-}
-
-.instruction-card ol {
-  margin: 0;
-  padding-left: 18px;
-}
-
-pre {
-  margin: 10px 0 0;
-  padding: 12px;
-  border-radius: 15px;
-  overflow-x: auto;
-  background: #050505;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-code {
-  font-family: "SFMono-Regular", "SF Mono", Consolas, monospace;
-}
-
-.podcast-group {
-  display: grid;
-  gap: 8px;
-}
-
-.podcast-group + .podcast-group {
-  margin-top: 6px;
-}
-
-.podcast-group-title {
-  margin: 0;
-  padding: 0 2px;
-  font-size: 0.84rem;
-  color: var(--muted);
-  letter-spacing: 0.01em;
 }
 
 @media (min-width: 421px) {
@@ -298,6 +362,10 @@ code {
   .app-shell {
     padding-top: 22px;
     padding-bottom: 44px;
+  }
+
+  .app-shell-kids {
+    --content-width: 560px;
   }
 }
 
@@ -318,9 +386,14 @@ code {
     font-size: 0.88rem;
   }
 
-  .panel-head {
+  .panel-head,
+  .nav-card {
     gap: 9px;
     padding: 12px;
+  }
+
+  .panel-head-collapsible {
+    min-height: 70px;
   }
 
   .artwork {
@@ -340,7 +413,8 @@ code {
   }
 
   .tap-copy strong,
-  .playlist-copy strong {
+  .playlist-copy strong,
+  .nav-copy strong {
     font-size: 0.87rem;
   }
 
@@ -348,7 +422,8 @@ code {
   .playlist-copy span,
   .panel-copy,
   .section-header p,
-  .podcast-group-title {
+  .nav-copy span,
+  .back-link {
     font-size: 0.74rem;
   }
 }

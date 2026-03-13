@@ -6,26 +6,36 @@
     <meta name="theme-color" content="#0a0a0a" />
     <meta
       name="description"
-      content="Spotify Lite is a minimal mobile-first dashboard for curated podcasts and playlists."
+      content="Julie’s Spotify is a minimal mobile-first dashboard for curated podcasts and playlists."
     />
-    <title>Spotify Lite</title>
+    <title>Julie’s Spotify</title>
     <link rel="manifest" href="manifest.json" />
     <link rel="preconnect" href="https://i.scdn.co" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-page="home">
     <main class="app-shell">
       <header class="hero">
-        <p class="eyebrow">Julie Audio</p>
-        <h1>Spotify Lite</h1>
+        <p class="eyebrow">Julie’s Spotify</p>
+        <h1>Julie’s Spotify</h1>
         <p class="hero-copy">
-          Curated podcasts and playlists in a compact, phone-first dashboard.
+          Daily podcasts and favorite playlists in a compact, phone-first dashboard.
         </p>
       </header>
 
+      <section class="section" aria-labelledby="kids-link-heading">
+        <a class="nav-card" href="kids.html" aria-labelledby="kids-link-heading kids-link-copy">
+          <span class="nav-copy">
+            <strong id="kids-link-heading">Kids</strong>
+            <span id="kids-link-copy">Open the separate kids page for more episodes and easy replaying.</span>
+          </span>
+          <span class="arrow" aria-hidden="true">↗</span>
+        </a>
+      </section>
+
       <section class="section" aria-labelledby="podcasts-heading">
         <div class="section-header">
-          <h2 id="podcasts-heading">Podcasts</h2>
+          <h2 id="podcasts-heading">Julie’s Daily Pods</h2>
           <p>Latest 3 episodes from each curated show.</p>
         </div>
         <div id="podcasts" class="card-grid" aria-live="polite"></div>
@@ -33,7 +43,7 @@
 
       <section class="section" aria-labelledby="playlists-heading">
         <div class="section-header">
-          <h2 id="playlists-heading">Playlists</h2>
+          <h2 id="playlists-heading">Music Playlists</h2>
           <p>Quick jumps straight into Spotify.</p>
         </div>
         <div id="playlists" class="card-grid" aria-live="polite"></div>

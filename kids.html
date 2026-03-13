@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta
+      name="description"
+      content="Kids podcasts from Julie’s Spotify with more episodes for easy browsing and replaying."
+    />
+    <title>Kids</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="preconnect" href="https://i.scdn.co" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body data-page="kids">
+    <main class="app-shell app-shell-kids">
+      <header class="hero hero-kids">
+        <a class="back-link" href="index.html">← Home</a>
+        <p class="eyebrow">Julie’s Spotify</p>
+        <h1>Kids</h1>
+        <p class="hero-copy">
+          Browse and replay a bigger set of episodes from the kids favorites.
+        </p>
+      </header>
+
+      <section class="section" aria-labelledby="kids-podcasts-heading">
+        <div class="section-header">
+          <h2 id="kids-podcasts-heading">Kids Podcasts</h2>
+          <p>12 recent episodes per show for easier browsing.</p>
+        </div>
+        <div id="podcasts" class="card-grid" aria-live="polite"></div>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

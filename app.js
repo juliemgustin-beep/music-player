@@ -1,10 +1,13 @@
 const API_BASE = "https://api.spotify.com/v1";
-const EPISODE_LIMIT = 3;
-const DATA_CACHE_VERSION = "spotify-lite-data-v2";
+const HOME_EPISODE_LIMIT = 3;
+const KIDS_EPISODE_LIMIT = 12;
+const DATA_CACHE_VERSION = "spotify-lite-data-v3";
 const TOKEN_CACHE_KEY = "spotify-lite-token-cache";
 
+const pageType = document.body.dataset.page || "home";
 const podcastsRoot = document.getElementById("podcasts");
 const playlistsRoot = document.getElementById("playlists");
+let expandedPodcastCard = null;
 
 bootstrap();
 
@@ -12,36 +15,66 @@ async function bootstrap() {
   registerServiceWorker();
 
   if (!Array.isArray(PODCASTS) || !Array.isArray(PLAYLISTS)) {
-    renderStateCard(
-      podcastsRoot,
-      "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
-    );
-    renderStateCard(
-      playlistsRoot,
-      "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
-    );
+    if (podcastsRoot) {
+      renderStateCard(
+        podcastsRoot,
+        "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
+      );
+    }
+    if (playlistsRoot) {
+      renderStateCard(
+        playlistsRoot,
+        "Config is missing. Make sure config.js defines PODCASTS and PLAYLISTS."
+      );
+    }
     return;
   }
 
   if (!hasSpotifyAuthConfig()) {
-    renderPodcastGroupsSkeleton(
-      "Add a Cloudflare Worker token endpoint in config.js to load this group automatically."
-    );
-    renderStateCard(
-      playlistsRoot,
-      "Add a Cloudflare Worker token endpoint in config.js to load your curated playlists."
-    );
+    if (podcastsRoot) {
+      renderStateCard(
+        podcastsRoot,
+        "Add a Cloudflare Worker token endpoint in config.js to load this page automatically."
+      );
+    }
+    if (playlistsRoot) {
+      renderStateCard(
+        playlistsRoot,
+        "Add a Cloudflare Worker token endpoint in config.js to load your playlists."
+      );
+    }
     return;
   }
 
-  renderStateCard(podcastsRoot, "Loading podcasts...");
-  renderStateCard(playlistsRoot, "Loading playlists...");
+  if (podcastsRoot) {
+    renderStateCard(podcastsRoot, "Loading podcasts...");
+  }
+  if (playlistsRoot) {
+    renderStateCard(playlistsRoot, "Loading playlists...");
+  }
 
-  await Promise.all([loadPodcasts(), loadPlaylists()]);
+  if (pageType === "kids") {
+    await loadKidsPage();
+    return;
+  }
+
+  await loadHomePage();
 }
 
-async function loadPodcasts() {
-  const curated = PODCASTS.filter((podcast) => podcast.id && podcast.group);
+async function loadHomePage() {
+  await Promise.all([loadPodcasts("Julie’s Daily Pods", HOME_EPISODE_LIMIT), loadPlaylists()]);
+}
+
+async function loadKidsPage() {
+  await loadPodcasts("Kids", KIDS_EPISODE_LIMIT);
+}
+
+async function loadPodcasts(groupName, episodeLimit) {
+  const curated = PODCASTS.filter((podcast) => podcast.id && podcast.group === groupName);
+
+  if (!podcastsRoot) {
+    return;
+  }
 
   if (!curated.length) {
     renderStateCard(podcastsRoot, "Add podcast IDs in config.js to populate this section.");
@@ -49,23 +82,10 @@ async function loadPodcasts() {
   }
 
   try {
-    const cards = await Promise.all(curated.map(fetchPodcastEpisodes));
-    const cardsByGroup = new Map();
-
-    cards.forEach((card, index) => {
-      const podcast = curated[index];
-      if (!cardsByGroup.has(podcast.group)) {
-        cardsByGroup.set(podcast.group, []);
-      }
-      cardsByGroup.get(podcast.group).push(card);
-    });
-
-    const groups = [];
-    for (const [groupName, groupCards] of cardsByGroup.entries()) {
-      groups.push(buildPodcastGroup(groupName, groupCards));
-    }
-
-    podcastsRoot.replaceChildren(...groups);
+    const cards = await Promise.all(
+      curated.map((podcast) => fetchPodcastEpisodes(podcast, episodeLimit))
+    );
+    podcastsRoot.replaceChildren(...cards);
   } catch (error) {
     console.error(error);
     renderStateCard(
@@ -77,6 +97,10 @@ async function loadPodcasts() {
 
 async function loadPlaylists() {
   const curated = PLAYLISTS.filter((playlist) => playlist.id);
+
+  if (!playlistsRoot) {
+    return;
+  }
 
   if (!curated.length) {
     renderStateCard(playlistsRoot, "Add playlist IDs in config.js to populate this section.");
@@ -95,28 +119,37 @@ async function loadPlaylists() {
   }
 }
 
-async function fetchPodcastEpisodes(podcast) {
+async function fetchPodcastEpisodes(podcast, episodeLimit) {
   const endpoint = `${API_BASE}/shows/${encodeURIComponent(
     podcast.id
-  )}/episodes?market=US&limit=${EPISODE_LIMIT}`;
+  )}/episodes?market=US&limit=${episodeLimit}`;
   const data = await fetchSpotify(endpoint);
-  const items = Array.isArray(data.items) ? data.items.slice(0, EPISODE_LIMIT) : [];
+  const items = Array.isArray(data.items) ? data.items.slice(0, episodeLimit) : [];
 
   const panel = document.createElement("article");
-  panel.className = "panel";
+  panel.className = pageType === "kids" ? "panel panel-kids panel-collapsible" : "panel panel-collapsible";
 
-  const firstEpisode = items[0];
-  panel.append(
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "panel-toggle";
+  button.setAttribute("aria-expanded", "false");
+
+  button.append(
     buildPanelHead({
       title: podcast.name,
-      subtitle: firstEpisode?.show?.publisher || "Latest episodes",
-      imageUrl: firstEpisode?.images?.[0]?.url || "",
-      fallbackText: podcast.name
+      subtitle: `${episodeLimit} recent episodes`,
+      imageUrl: items[0]?.images?.[0]?.url || "",
+      fallbackText: podcast.name,
+      collapsible: true
     })
   );
 
+  const body = document.createElement("div");
+  body.className = "panel-body";
+  body.hidden = true;
+
   const episodeList = document.createElement("div");
-  episodeList.className = "episode-list";
+  episodeList.className = pageType === "kids" ? "episode-list episode-list-kids" : "episode-list";
 
   if (!items.length) {
     episodeList.appendChild(makeStateCard("No episodes were returned for this podcast."));
@@ -124,7 +157,10 @@ async function fetchPodcastEpisodes(podcast) {
     items.forEach((episode) => episodeList.appendChild(buildEpisodeLink(episode)));
   }
 
-  panel.appendChild(episodeList);
+  body.appendChild(episodeList);
+  panel.append(button, body);
+  setupCollapsibleCard(panel, button, body);
+
   return panel;
 }
 
@@ -141,7 +177,8 @@ async function fetchPlaylist(playlist) {
       title: data.name || playlist.name,
       subtitle: `${data.tracks?.total || 0} tracks`,
       imageUrl: data.images?.[0]?.url || "",
-      fallbackText: playlist.name
+      fallbackText: playlist.name,
+      collapsible: false
     })
   );
 
@@ -164,6 +201,64 @@ async function fetchPlaylist(playlist) {
   wrap.appendChild(link);
   panel.appendChild(wrap);
   return panel;
+}
+
+function setupCollapsibleCard(panel, button, body) {
+  button.addEventListener("click", () => {
+    const isExpanded = panel.classList.contains("is-expanded");
+
+    if (isExpanded) {
+      collapsePodcastCard(panel, button, body);
+      if (expandedPodcastCard === panel) {
+        expandedPodcastCard = null;
+      }
+      return;
+    }
+
+    if (expandedPodcastCard && expandedPodcastCard !== panel) {
+      const activeButton = expandedPodcastCard.querySelector(".panel-toggle");
+      const activeBody = expandedPodcastCard.querySelector(".panel-body");
+      collapsePodcastCard(expandedPodcastCard, activeButton, activeBody);
+    }
+
+    expandPodcastCard(panel, button, body);
+    expandedPodcastCard = panel;
+  });
+}
+
+function expandPodcastCard(panel, button, body) {
+  panel.classList.add("is-expanded");
+  button.setAttribute("aria-expanded", "true");
+  body.hidden = false;
+  body.style.height = `${body.scrollHeight}px`;
+
+  const onExpandEnd = (event) => {
+    if (event.propertyName === "height") {
+      body.style.height = "auto";
+      body.removeEventListener("transitionend", onExpandEnd);
+    }
+  };
+
+  body.addEventListener("transitionend", onExpandEnd);
+}
+
+function collapsePodcastCard(panel, button, body) {
+  panel.classList.remove("is-expanded");
+  button.setAttribute("aria-expanded", "false");
+
+  const startHeight = body.scrollHeight;
+  body.style.height = `${startHeight}px`;
+  void body.offsetHeight;
+  body.style.height = "0px";
+
+  const onCollapseEnd = (event) => {
+    if (event.propertyName === "height") {
+      body.hidden = true;
+      body.removeEventListener("transitionend", onCollapseEnd);
+    }
+  };
+
+  body.addEventListener("transitionend", onCollapseEnd);
 }
 
 async function fetchSpotify(url) {
@@ -225,45 +320,9 @@ function hasSpotifyAuthConfig() {
   return Boolean(SPOTIFY_ACCESS_TOKEN || SPOTIFY_TOKEN_ENDPOINT);
 }
 
-function renderPodcastGroupsSkeleton(message) {
-  const groups = groupPodcasts(PODCASTS.filter((podcast) => podcast.id && podcast.group));
-  const sections = Array.from(groups.entries()).map(([groupName]) =>
-    buildPodcastGroup(groupName, [makeStateCard(message)])
-  );
-
-  podcastsRoot.replaceChildren(...sections);
-}
-
-function buildPodcastGroup(groupName, cards) {
-  const section = document.createElement("section");
-  section.className = "podcast-group";
-
-  const heading = document.createElement("h3");
-  heading.className = "podcast-group-title";
-  heading.textContent = groupName;
-  section.appendChild(heading);
-
-  const grid = document.createElement("div");
-  grid.className = "card-grid";
-  grid.append(...cards);
-  section.appendChild(grid);
-
-  return section;
-}
-
-function groupPodcasts(podcasts) {
-  return podcasts.reduce((groups, podcast) => {
-    if (!groups.has(podcast.group)) {
-      groups.set(podcast.group, []);
-    }
-    groups.get(podcast.group).push(podcast);
-    return groups;
-  }, new Map());
-}
-
-function buildPanelHead({ title, subtitle, imageUrl, fallbackText }) {
+function buildPanelHead({ title, subtitle, imageUrl, fallbackText, collapsible }) {
   const head = document.createElement("div");
-  head.className = "panel-head";
+  head.className = collapsible ? "panel-head panel-head-collapsible" : "panel-head";
 
   if (imageUrl) {
     const image = document.createElement("img");
@@ -281,18 +340,27 @@ function buildPanelHead({ title, subtitle, imageUrl, fallbackText }) {
   }
 
   const text = document.createElement("div");
+  text.className = "panel-head-copy";
   text.innerHTML = `
     <h3 class="panel-title">${escapeHtml(title)}</h3>
     <p class="panel-copy">${escapeHtml(subtitle)}</p>
   `;
   head.appendChild(text);
 
+  if (collapsible) {
+    const chevron = document.createElement("span");
+    chevron.className = "chevron";
+    chevron.setAttribute("aria-hidden", "true");
+    chevron.textContent = "+";
+    head.appendChild(chevron);
+  }
+
   return head;
 }
 
 function buildEpisodeLink(episode) {
   const link = document.createElement("a");
-  link.className = "tap-card";
+  link.className = pageType === "kids" ? "tap-card tap-card-kids" : "tap-card";
   link.href = episode.external_urls?.spotify || `https://open.spotify.com/episode/${episode.id}`;
   link.target = "_blank";
   link.rel = "noreferrer";
