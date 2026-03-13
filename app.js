@@ -1,7 +1,7 @@
 const API_BASE = "https://api.spotify.com/v1";
 <<<<<<< HEAD
 const HOME_EPISODE_LIMIT = 3;
-const KIDS_EPISODE_LIMIT = 12;
+const KIDS_EPISODE_LIMIT = 100;
 const DATA_CACHE_VERSION = "spotify-lite-data-v3";
 const TOKEN_CACHE_KEY = "spotify-lite-token-cache";
 
