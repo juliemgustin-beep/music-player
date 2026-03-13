@@ -1,5 +1,5 @@
 const API_BASE = "https://api.spotify.com/v1";
-const EPISODE_LIMIT = 5;
+const EPISODE_LIMIT = 3;
 const DATA_CACHE_VERSION = "spotify-lite-data-v2";
 const TOKEN_CACHE_KEY = "spotify-lite-token-cache";
 
