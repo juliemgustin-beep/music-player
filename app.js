@@ -81,18 +81,27 @@ async function loadPodcasts(groupName, episodeLimit) {
     return;
   }
 
-  try {
-    const cards = await Promise.all(
-      curated.map((podcast) => fetchPodcastEpisodes(podcast, episodeLimit))
-    );
-    podcastsRoot.replaceChildren(...cards);
-  } catch (error) {
-    console.error(error);
+  const results = await Promise.allSettled(
+    curated.map((podcast) => fetchPodcastEpisodes(podcast, episodeLimit))
+  );
+
+  const cards = results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value);
+
+  results
+    .filter((result) => result.status === "rejected")
+    .forEach((result) => console.error(result.reason));
+
+  if (!cards.length) {
     renderStateCard(
       podcastsRoot,
       "Spotify couldn't load podcasts. Check your IDs and token endpoint, then try again."
     );
+    return;
   }
+
+  podcastsRoot.replaceChildren(...cards);
 }
 
 async function loadPlaylists() {
@@ -107,16 +116,24 @@ async function loadPlaylists() {
     return;
   }
 
-  try {
-    const cards = await Promise.all(curated.map(fetchPlaylist));
-    playlistsRoot.replaceChildren(...cards);
-  } catch (error) {
-    console.error(error);
+  const results = await Promise.allSettled(curated.map(fetchPlaylist));
+  const cards = results
+    .filter((result) => result.status === "fulfilled")
+    .map((result) => result.value);
+
+  results
+    .filter((result) => result.status === "rejected")
+    .forEach((result) => console.error(result.reason));
+
+  if (!cards.length) {
     renderStateCard(
       playlistsRoot,
       "Spotify couldn't load playlists. Check your IDs and token endpoint, then try again."
     );
+    return;
   }
+
+  playlistsRoot.replaceChildren(...cards);
 }
 
 async function fetchPodcastEpisodes(podcast, episodeLimit) {
