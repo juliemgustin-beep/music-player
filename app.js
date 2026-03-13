@@ -287,20 +287,32 @@ async function fetchSpotify(url) {
     return cached;
   }
 
-  const accessToken = await getAccessToken();
+  const data = await fetchSpotifyWithToken(url, await getAccessToken());
+  writeCachedResponse(url, data);
+  return data;
+}
+
+async function fetchSpotifyWithToken(url, accessToken) {
   const response = await fetch(url, {
     headers: {
       Authorization: `Bearer ${accessToken}`
     }
   });
 
+  if (response.status === 401 && !SPOTIFY_ACCESS_TOKEN) {
+    clearTokenCache();
+    const refreshedToken = await getAccessToken();
+
+    if (refreshedToken !== accessToken) {
+      return fetchSpotifyWithToken(url, refreshedToken);
+    }
+  }
+
   if (!response.ok) {
     throw new Error(`Spotify API error ${response.status}`);
   }
 
-  const data = await response.json();
-  writeCachedResponse(url, data);
-  return data;
+  return response.json();
 }
 
 async function getAccessToken() {
@@ -513,6 +525,15 @@ function writeTokenCache(accessToken, expiresAt) {
     console.warn("Token cache write failed", error);
   }
 }
+
+function clearTokenCache() {
+  try {
+    localStorage.removeItem(TOKEN_CACHE_KEY);
+  } catch (error) {
+    console.warn("Token cache clear failed", error);
+  }
+}
+
 
 function registerServiceWorker() {
   if ("serviceWorker" in navigator) {
