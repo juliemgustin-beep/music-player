@@ -1,10 +1,17 @@
 {
-  "name": "Spotify Lite",
-  "short_name": "Spotify Lite",
+  "name": "Julie’s Spotify",
+  "short_name": "Julie’s Spotify",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#080909",
   "theme_color": "#080909",
   "description": "A minimal dashboard for curated Spotify podcasts and playlists.",
-  "icons": []
+  "icons": [
+    {
+      "src": "./ChatGPT Image Mar 12, 2026, 08_01_26 PM.png",
+      "sizes": "1024x1024",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
 }
