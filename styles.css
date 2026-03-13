@@ -1,0 +1,278 @@
+:root {
+  color-scheme: dark;
+  --bg: #080909;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-strong: rgba(255, 255, 255, 0.1);
+  --border: rgba(255, 255, 255, 0.08);
+  --text: #f5f7f5;
+  --muted: #98a39d;
+  --accent: #1ed760;
+  --accent-soft: rgba(30, 215, 96, 0.16);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  --radius: 24px;
+  --radius-sm: 18px;
+  --content-width: 760px;
+  --tap-size: 56px;
+  font-family: "SF Pro Display", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top, rgba(30, 215, 96, 0.18), transparent 30%),
+    linear-gradient(180deg, #111313 0%, var(--bg) 28%, #040404 100%);
+  color: var(--text);
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  width: min(100%, var(--content-width));
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+.hero {
+  padding: 20px 4px 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.76rem;
+  font-weight: 700;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: clamp(2.4rem, 9vw, 4.2rem);
+  line-height: 0.95;
+}
+
+.hero-copy {
+  margin: 14px 0 0;
+  max-width: 34rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.section-header {
+  margin-bottom: 14px;
+}
+
+.section-header h2 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.section-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.card-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.panel,
+.state-card,
+.instruction-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+}
+
+.artwork {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(30, 215, 96, 0.4), rgba(255, 255, 255, 0.1));
+  flex-shrink: 0;
+}
+
+.artwork.placeholder {
+  display: grid;
+  place-items: center;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+
+.panel-title {
+  margin: 0;
+  font-size: 1.04rem;
+}
+
+.panel-copy {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.episode-list,
+.playlist-wrap {
+  display: grid;
+  gap: 10px;
+  padding: 0 18px 18px;
+}
+
+.tap-card,
+.playlist-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--tap-size);
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  text-decoration: none;
+  transition:
+    transform 160ms ease,
+    background 160ms ease,
+    border-color 160ms ease;
+}
+
+.tap-card:hover,
+.tap-card:focus-visible,
+.playlist-link:hover,
+.playlist-link:focus-visible {
+  transform: translateY(-1px);
+  background: var(--surface-strong);
+  border-color: rgba(30, 215, 96, 0.28);
+  outline: none;
+}
+
+.tap-copy,
+.playlist-copy {
+  min-width: 0;
+}
+
+.tap-copy strong,
+.playlist-copy strong {
+  display: block;
+  font-size: 0.98rem;
+  line-height: 1.35;
+}
+
+.tap-copy span,
+.playlist-copy span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.arrow {
+  color: var(--accent);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.state-card,
+.instruction-card {
+  padding: 18px;
+}
+
+.state-card {
+  color: var(--muted);
+}
+
+.instruction-card + .instruction-card {
+  margin-top: 14px;
+}
+
+.instruction-card h3 {
+  margin: 0 0 10px;
+}
+
+.instruction-card p,
+.instruction-card li {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.instruction-card ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+pre {
+  margin: 14px 0 0;
+  padding: 14px;
+  border-radius: 18px;
+  overflow-x: auto;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+code {
+  font-family: "SFMono-Regular", "SF Mono", Consolas, monospace;
+}
+
+@media (min-width: 720px) {
+  .app-shell {
+    padding: 36px 24px 72px;
+  }
+
+  .panel-head {
+    padding: 20px;
+  }
+
+  .episode-list,
+  .playlist-wrap {
+    padding: 0 20px 20px;
+  }
+}
+
+.podcast-group {
+  display: grid;
+  gap: 12px;
+}
+
+.podcast-group + .podcast-group {
+  margin-top: 10px;
+}
+
+.podcast-group-title {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 1rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
