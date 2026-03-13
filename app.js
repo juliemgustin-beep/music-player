@@ -116,23 +116,7 @@ async function loadPlaylists() {
     return;
   }
 
-  const results = await Promise.allSettled(curated.map(fetchPlaylist));
-  const cards = results
-    .filter((result) => result.status === "fulfilled")
-    .map((result) => result.value);
-
-  results
-    .filter((result) => result.status === "rejected")
-    .forEach((result) => console.error(result.reason));
-
-  if (!cards.length) {
-    renderStateCard(
-      playlistsRoot,
-      "Spotify couldn't load playlists. Check your IDs and token endpoint, then try again."
-    );
-    return;
-  }
-
+  const cards = curated.map(buildPlaylistCard);
   playlistsRoot.replaceChildren(...cards);
 }
 
@@ -201,19 +185,14 @@ async function fetchShowEpisodes(showId, desiredCount) {
   return items.slice(0, desiredCount);
 }
 
-async function fetchPlaylist(playlist) {
-  const endpoint = `${API_BASE}/playlists/${encodeURIComponent(
-    playlist.id
-  )}?market=US&fields=id,name,description,external_urls,images,tracks(total)`;
-  const data = await fetchSpotify(endpoint);
-
+function buildPlaylistCard(playlist) {
   const panel = document.createElement("article");
   panel.className = "panel";
   panel.append(
     buildPanelHead({
-      title: data.name || playlist.name,
-      subtitle: `${data.tracks?.total || 0} tracks`,
-      imageUrl: data.images?.[0]?.url || "",
+      title: playlist.name,
+      subtitle: "Open in Spotify",
+      imageUrl: "",
       fallbackText: playlist.name,
       collapsible: false
     })
@@ -229,8 +208,8 @@ async function fetchPlaylist(playlist) {
   link.rel = "noreferrer";
   link.innerHTML = `
     <span class="playlist-copy">
-      <strong>${escapeHtml(data.name || playlist.name)}</strong>
-      <span>${escapeHtml(stripHtml(data.description) || "Open playlist in Spotify")}</span>
+      <strong>${escapeHtml(playlist.name)}</strong>
+      <span>Open playlist in Spotify</span>
     </span>
     <span class="arrow" aria-hidden="true">↗</span>
   `;
