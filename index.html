@@ -6,13 +6,20 @@
     <meta name="theme-color" content="#0a0a0a" />
     <meta
       name="description"
+<<<<<<< HEAD
       content="Julie’s Spotify is a minimal mobile-first dashboard for curated podcasts and playlists."
     />
     <title>Julie’s Spotify</title>
+=======
+      content="Spotify Lite is a minimal mobile-first dashboard for curated podcasts and playlists."
+    />
+    <title>Spotify Lite</title>
+>>>>>>> 719dd2b (Build Spotify Lite)
     <link rel="manifest" href="manifest.json" />
     <link rel="preconnect" href="https://i.scdn.co" />
     <link rel="stylesheet" href="styles.css" />
   </head>
+<<<<<<< HEAD
   <body data-page="home">
     <main class="app-shell">
       <header class="hero">
@@ -37,17 +44,80 @@
         <div class="section-header">
           <h2 id="podcasts-heading">Julie’s Daily Pods</h2>
           <p>Latest 3 episodes from each curated show.</p>
+=======
+  <body>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">Julie Audio</p>
+        <h1>Spotify Lite</h1>
+        <p class="hero-copy">
+          A clean dashboard for the podcasts and playlists you actually want.
+        </p>
+      </header>
+
+      <section class="section" aria-labelledby="podcasts-heading">
+        <div class="section-header">
+          <h2 id="podcasts-heading">Podcasts</h2>
+          <p>Latest 5 episodes from each curated show.</p>
+>>>>>>> 719dd2b (Build Spotify Lite)
         </div>
         <div id="podcasts" class="card-grid" aria-live="polite"></div>
       </section>
 
       <section class="section" aria-labelledby="playlists-heading">
         <div class="section-header">
+<<<<<<< HEAD
           <h2 id="playlists-heading">Music Playlists</h2>
           <p>Quick jumps straight into Spotify.</p>
         </div>
         <div id="playlists" class="card-grid" aria-live="polite"></div>
       </section>
+=======
+          <h2 id="playlists-heading">Playlists</h2>
+          <p>Large cards that jump directly into Spotify.</p>
+        </div>
+        <div id="playlists" class="card-grid" aria-live="polite"></div>
+      </section>
+
+      <section class="section" aria-labelledby="setup-heading">
+        <div class="section-header">
+          <h2 id="setup-heading">Setup</h2>
+          <p>How to get a token and deploy as a static site.</p>
+        </div>
+
+        <article class="instruction-card">
+          <h3>How to get a Spotify API token</h3>
+          <ol>
+            <li>
+              Create an app in the
+              <a href="https://developer.spotify.com/dashboard" target="_blank" rel="noreferrer">
+                Spotify Developer Dashboard
+              </a>.
+            </li>
+            <li>Copy your Client ID and Client Secret.</li>
+            <li>Run this command to generate a client credentials token:</li>
+          </ol>
+          <pre><code>curl -X POST "https://accounts.spotify.com/api/token" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "grant_type=client_credentials&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET"</code></pre>
+          <p>
+            Paste the returned <code>access_token</code> into
+            <code>SPOTIFY_ACCESS_TOKEN</code> in <code>config.js</code>.
+          </p>
+        </article>
+
+        <article class="instruction-card">
+          <h3>How to deploy to GitHub Pages</h3>
+          <ol>
+            <li>Push this folder to a GitHub repository.</li>
+            <li>Open <code>Settings → Pages</code> in GitHub.</li>
+            <li>Select <code>Deploy from a branch</code>.</li>
+            <li>Choose the branch and root folder, then save.</li>
+            <li>Open the published Pages URL after the deploy finishes.</li>
+          </ol>
+        </article>
+      </section>
+>>>>>>> 719dd2b (Build Spotify Lite)
     </main>
 
     <script src="config.js"></script>

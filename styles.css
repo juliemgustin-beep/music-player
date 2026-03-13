@@ -2,16 +2,29 @@
   color-scheme: dark;
   --bg: #080909;
   --surface: rgba(255, 255, 255, 0.05);
+<<<<<<< HEAD
   --surface-strong: rgba(255, 255, 255, 0.085);
+=======
+  --surface-strong: rgba(255, 255, 255, 0.1);
+>>>>>>> 719dd2b (Build Spotify Lite)
   --border: rgba(255, 255, 255, 0.08);
   --text: #f5f7f5;
   --muted: #98a39d;
   --accent: #1ed760;
+<<<<<<< HEAD
   --shadow: 0 18px 40px rgba(0, 0, 0, 0.3);
   --radius: 20px;
   --radius-sm: 15px;
   --content-width: 420px;
   --tap-size: 44px;
+=======
+  --accent-soft: rgba(30, 215, 96, 0.16);
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  --radius: 24px;
+  --radius-sm: 18px;
+  --content-width: 760px;
+  --tap-size: 56px;
+>>>>>>> 719dd2b (Build Spotify Lite)
   font-family: "SF Pro Display", "Segoe UI", sans-serif;
 }
 
@@ -26,10 +39,16 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
+<<<<<<< HEAD
   overflow-x: hidden;
   background:
     radial-gradient(circle at top, rgba(30, 215, 96, 0.16), transparent 30%),
     linear-gradient(180deg, #111313 0%, var(--bg) 24%, #040404 100%);
+=======
+  background:
+    radial-gradient(circle at top, rgba(30, 215, 96, 0.18), transparent 30%),
+    linear-gradient(180deg, #111313 0%, var(--bg) 28%, #040404 100%);
+>>>>>>> 719dd2b (Build Spotify Lite)
   color: var(--text);
 }
 
@@ -37,6 +56,7 @@ a {
   color: inherit;
 }
 
+<<<<<<< HEAD
 img {
   display: block;
 }
@@ -69,10 +89,29 @@ button {
   text-transform: uppercase;
   letter-spacing: 0.14em;
   font-size: 0.66rem;
+=======
+.app-shell {
+  width: min(100%, var(--content-width));
+  margin: 0 auto;
+  padding: 24px 16px 56px;
+}
+
+.hero {
+  padding: 20px 4px 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 0.76rem;
+>>>>>>> 719dd2b (Build Spotify Lite)
   font-weight: 700;
 }
 
 .hero h1 {
+<<<<<<< HEAD
   margin: 6px 0 0;
   font-size: clamp(1.9rem, 7.2vw, 2.45rem);
   line-height: 1;
@@ -103,10 +142,31 @@ button {
 .section-header {
   margin-bottom: 10px;
   padding: 0 2px;
+=======
+  margin: 0;
+  font-size: clamp(2.4rem, 9vw, 4.2rem);
+  line-height: 0.95;
+}
+
+.hero-copy {
+  margin: 14px 0 0;
+  max-width: 34rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.section {
+  margin-top: 20px;
+}
+
+.section-header {
+  margin-bottom: 14px;
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .section-header h2 {
   margin: 0;
+<<<<<<< HEAD
   font-size: 1.02rem;
   letter-spacing: -0.01em;
 }
@@ -116,20 +176,39 @@ button {
   color: var(--muted);
   font-size: 0.82rem;
   line-height: 1.35;
+=======
+  font-size: 1.3rem;
+}
+
+.section-header p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  line-height: 1.45;
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .card-grid {
   display: grid;
+<<<<<<< HEAD
   gap: 10px;
 }
 
 .nav-card,
 .panel,
 .state-card {
+=======
+  gap: 14px;
+}
+
+.panel,
+.state-card,
+.instruction-card {
+>>>>>>> 719dd2b (Build Spotify Lite)
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--surface);
   box-shadow: var(--shadow);
+<<<<<<< HEAD
   backdrop-filter: blur(16px);
 }
 
@@ -158,12 +237,16 @@ button {
   color: var(--muted);
   font-size: 0.8rem;
   line-height: 1.35;
+=======
+  backdrop-filter: blur(18px);
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .panel {
   overflow: hidden;
 }
 
+<<<<<<< HEAD
 .panel-kids {
   background: rgba(255, 255, 255, 0.045);
 }
@@ -228,18 +311,38 @@ button {
   border-radius: 16px;
   object-fit: cover;
   background: linear-gradient(135deg, rgba(30, 215, 96, 0.38), rgba(255, 255, 255, 0.08));
+=======
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+}
+
+.artwork {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  object-fit: cover;
+  background: linear-gradient(135deg, rgba(30, 215, 96, 0.4), rgba(255, 255, 255, 0.1));
+>>>>>>> 719dd2b (Build Spotify Lite)
   flex-shrink: 0;
 }
 
 .artwork.placeholder {
   display: grid;
   place-items: center;
+<<<<<<< HEAD
   font-size: 1rem;
+=======
+  font-size: 1.4rem;
+>>>>>>> 719dd2b (Build Spotify Lite)
   font-weight: 700;
 }
 
 .panel-title {
   margin: 0;
+<<<<<<< HEAD
   font-size: 0.97rem;
   line-height: 1.2;
   letter-spacing: -0.01em;
@@ -256,17 +359,32 @@ button {
   height: 0;
   overflow: hidden;
   transition: height 220ms ease;
+=======
+  font-size: 1.04rem;
+}
+
+.panel-copy {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.45;
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .episode-list,
 .playlist-wrap {
   display: grid;
+<<<<<<< HEAD
   gap: 8px;
   padding: 0 14px 14px;
 }
 
 .episode-list-kids {
   gap: 7px;
+=======
+  gap: 10px;
+  padding: 0 18px 18px;
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .tap-card,
@@ -274,6 +392,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
+<<<<<<< HEAD
   gap: 10px;
   min-height: var(--tap-size);
   width: 100%;
@@ -281,6 +400,14 @@ button {
   border-radius: var(--radius-sm);
   border: 1px solid rgba(255, 255, 255, 0.055);
   background: rgba(255, 255, 255, 0.038);
+=======
+  gap: 12px;
+  min-height: var(--tap-size);
+  padding: 14px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+>>>>>>> 719dd2b (Build Spotify Lite)
   text-decoration: none;
   transition:
     transform 160ms ease,
@@ -288,6 +415,7 @@ button {
     border-color 160ms ease;
 }
 
+<<<<<<< HEAD
 .tap-card-kids {
   align-items: flex-start;
   padding-top: 11px;
@@ -305,27 +433,45 @@ button {
   transform: translateY(-1px);
   background: var(--surface-strong);
   border-color: rgba(30, 215, 96, 0.24);
+=======
+.tap-card:hover,
+.tap-card:focus-visible,
+.playlist-link:hover,
+.playlist-link:focus-visible {
+  transform: translateY(-1px);
+  background: var(--surface-strong);
+  border-color: rgba(30, 215, 96, 0.28);
+>>>>>>> 719dd2b (Build Spotify Lite)
   outline: none;
 }
 
 .tap-copy,
 .playlist-copy {
   min-width: 0;
+<<<<<<< HEAD
   flex: 1;
+=======
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .tap-copy strong,
 .playlist-copy strong {
   display: block;
+<<<<<<< HEAD
   font-size: 0.9rem;
   line-height: 1.3;
   font-weight: 600;
   word-break: break-word;
+=======
+  font-size: 0.98rem;
+  line-height: 1.35;
+>>>>>>> 719dd2b (Build Spotify Lite)
 }
 
 .tap-copy span,
 .playlist-copy span {
   display: block;
+<<<<<<< HEAD
   margin-top: 2px;
   color: var(--muted);
   font-size: 0.76rem;
@@ -400,10 +546,73 @@ button {
     width: 50px;
     height: 50px;
     border-radius: 14px;
+=======
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.84rem;
+  line-height: 1.35;
+}
+
+.arrow {
+  color: var(--accent);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.state-card,
+.instruction-card {
+  padding: 18px;
+}
+
+.state-card {
+  color: var(--muted);
+}
+
+.instruction-card + .instruction-card {
+  margin-top: 14px;
+}
+
+.instruction-card h3 {
+  margin: 0 0 10px;
+}
+
+.instruction-card p,
+.instruction-card li {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.instruction-card ol {
+  margin: 0;
+  padding-left: 18px;
+}
+
+pre {
+  margin: 14px 0 0;
+  padding: 14px;
+  border-radius: 18px;
+  overflow-x: auto;
+  background: #050505;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+code {
+  font-family: "SFMono-Regular", "SF Mono", Consolas, monospace;
+}
+
+@media (min-width: 720px) {
+  .app-shell {
+    padding: 36px 24px 72px;
+  }
+
+  .panel-head {
+    padding: 20px;
+>>>>>>> 719dd2b (Build Spotify Lite)
   }
 
   .episode-list,
   .playlist-wrap {
+<<<<<<< HEAD
     padding: 0 12px 12px;
   }
 
@@ -427,3 +636,25 @@ button {
     font-size: 0.74rem;
   }
 }
+=======
+    padding: 0 20px 20px;
+  }
+}
+
+.podcast-group {
+  display: grid;
+  gap: 12px;
+}
+
+.podcast-group + .podcast-group {
+  margin-top: 10px;
+}
+
+.podcast-group-title {
+  margin: 0;
+  padding: 0 4px;
+  font-size: 1rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+>>>>>>> 719dd2b (Build Spotify Lite)
