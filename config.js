@@ -21,3 +21,24 @@ const PLAYLISTS = [
   { name: "Pump Up Running Mix", id: "37i9dQZF1EIg7NdxurAurL" },
   { name: "Hype Workout", id: "37i9dQZF1EIhIOnAU06Sx0" }
 ];
+
+const BOOKS = [
+  { name: "Marge in Charge", url: "https://play.google.com/books/listen?id=AQAAAIAdDAaMCM", series: "Marge in Charge" },
+  { name: "Marge in Charge and the Stolen Treasure", url: "https://play.google.com/books/listen?id=AQAAAEAoaScpHM", series: "Marge in Charge" },
+  { name: "Hello Mrs. Piggle Wiggle", url: "https://play.google.com/books/listen?id=AQAAAEBKdD00ZM", series: "Mrs. Piggle-Wiggle" },
+  { name: "Mrs. Piggle Wiggle", url: "https://play.google.com/books/listen?id=AQAAAACGOD84qM", series: "Mrs. Piggle-Wiggle" },
+  { name: "Mrs. Piggle Wiggle's Farm", url: "https://play.google.com/books/listen?id=AQAAAABCRBdERM", series: "Mrs. Piggle-Wiggle" },
+  { name: "Mrs. Piggle Wiggle's Magic", url: "https://play.google.com/books/listen?id=AQAAAAAjTF9MbM", series: "Mrs. Piggle-Wiggle" },
+  { name: "Happy Birthday Mrs. Piggle Wiggle", url: "https://play.google.com/books/listen?id=AQAAAAB0FUsVLM", series: "Mrs. Piggle-Wiggle" },
+  { name: "Goddess Girls Aphrodite the Beauty", url: "https://play.google.com/books/listen?id=AQAAAEBM_H68IM", series: "Goddess Girls" },
+  { name: "Goddess Girls Athena the Brain", url: "https://play.google.com/books/listen?id=AQAAAECM3TGdrM", series: "Goddess Girls" },
+  { name: "Harry Potter and the Sorcerer's Stone", url: "https://play.google.com/books/listen?id=AQAAAIDu1R1V4M", series: "Harry Potter" },
+  { name: "Harry Potter and the Chamber of Secrets", url: "https://play.google.com/books/listen?id=AQAAAIBu2xZbaM", series: "Harry Potter" },
+  { name: "Harry Potter and the Prisoner of Azkaban", url: "https://play.google.com/books/listen?id=AQAAAIDuM0iztM", series: "Harry Potter" },
+  { name: "Harry Potter and the Half Blood Prince", url: "https://play.google.com/books/listen?id=AQAAAIDug2ADnM", series: "Harry Potter" },
+  { name: "Sideways Stories from Wayside School", url: "https://play.google.com/books/listen?id=AQAAAIBVFAmUTM", series: "Wayside School" },
+  { name: "WaySide School is Falling Down", url: "https://play.google.com/books/listen?id=AQAAAIDV7VBtlM", series: "Wayside School" },
+  { name: "WaySide School Beneath the Cloud of Doom", url: "https://play.google.com/books/listen?id=AQAAAEBsARNBbM", series: "Wayside School" },
+  { name: "Mr. Popper's Penguins", url: "https://play.google.com/books/listen?id=AQAAAAC5dyN3iM", series: "Standalone" },
+  { name: "The Cricket in Times School", url: "https://play.google.com/books/listen?id=AQAAAIDwGw-b7M", series: "Standalone" }
+];

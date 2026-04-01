@@ -7,7 +7,9 @@ const TOKEN_CACHE_KEY = "spotify-lite-token-cache";
 const pageType = document.body.dataset.page || "home";
 const podcastsRoot = document.getElementById("podcasts");
 const playlistsRoot = document.getElementById("playlists");
+const booksRoot = document.getElementById("books");
 let expandedPodcastCard = null;
+let expandedBookGroup = null;
 
 bootstrap();
 
@@ -66,7 +68,7 @@ async function loadHomePage() {
 }
 
 async function loadKidsPage() {
-  await loadPodcasts("Kids", KIDS_EPISODE_LIMIT);
+  await Promise.all([loadPodcasts("Kids", KIDS_EPISODE_LIMIT), loadBooks()]);
 }
 
 async function loadPodcasts(groupName, episodeLimit) {
@@ -120,6 +122,27 @@ async function loadPlaylists() {
   playlistsRoot.replaceChildren(...cards);
 }
 
+async function loadBooks() {
+  const curated = Array.isArray(BOOKS) ? BOOKS.filter((book) => book.url) : [];
+
+  if (!booksRoot) {
+    return;
+  }
+
+  if (!curated.length) {
+    renderStateCard(booksRoot, "Add book links in config.js to populate this section.");
+    return;
+  }
+
+  const grouped = groupItemsBySeries(curated);
+  const sections = Array.from(grouped.entries()).map(([seriesName, books]) =>
+    buildSeriesGroup(seriesName, books)
+  );
+
+  booksRoot.replaceChildren(...sections);
+}
+
+
 async function fetchPodcastEpisodes(podcast, episodeLimit) {
   const items = await fetchShowEpisodes(podcast.id, episodeLimit);
 
@@ -135,7 +158,7 @@ async function fetchPodcastEpisodes(podcast, episodeLimit) {
     buildPanelHead({
       title: podcast.name,
       subtitle: `${episodeLimit} recent episodes`,
-      imageUrl: items[0]?.images?.[0]?.url || "",
+      imageUrl: pageType === "kids" ? "" : items[0]?.images?.[0]?.url || "",
       fallbackText: podcast.name,
       collapsible: true
     })
@@ -191,7 +214,7 @@ function buildPlaylistCard(playlist) {
   panel.append(
     buildPanelHead({
       title: playlist.name,
-      subtitle: "Open in Spotify",
+      subtitle: "",
       imageUrl: "",
       fallbackText: playlist.name,
       collapsible: false
@@ -219,12 +242,93 @@ function buildPlaylistCard(playlist) {
   return panel;
 }
 
+function buildSeriesGroup(seriesName, books) {
+  const section = document.createElement("section");
+  section.className = "panel panel-kids panel-collapsible media-group";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "panel-toggle";
+  button.setAttribute("aria-expanded", "false");
+  button.append(
+    buildPanelHead({
+      title: seriesName,
+      subtitle: `${books.length} books`,
+      imageUrl: "",
+      fallbackText: "",
+      collapsible: true
+    })
+  );
+
+  const body = document.createElement("div");
+  body.className = "panel-body";
+  body.hidden = true;
+
+  const grid = document.createElement("div");
+  grid.className = "card-grid media-group-grid";
+  grid.append(...books.map(buildBookCard));
+  body.appendChild(grid);
+
+  section.append(button, body);
+  setupCollapsibleGroup(section, button, body);
+  return section;
+}
+
+function groupItemsBySeries(items) {
+  return items.reduce((groups, item) => {
+    const key = item.series || "More Books";
+    if (!groups.has(key)) {
+      groups.set(key, []);
+    }
+    groups.get(key).push(item);
+    return groups;
+  }, new Map());
+}
+
+function buildBookCard(book) {
+  const link = document.createElement("a");
+  link.className = "playlist-link book-link";
+  link.href = book.url;
+  link.target = "_blank";
+  link.rel = "noreferrer";
+  link.innerHTML = `
+    <span class="playlist-copy">
+      <strong>${escapeHtml(book.name)}</strong>
+    </span>
+    <span class="arrow" aria-hidden="true">↗</span>
+  `;
+  return link;
+}
+
+function setupCollapsibleGroup(panel, button, body) {
+  button.addEventListener("click", () => {
+    const isExpanded = panel.classList.contains("is-expanded");
+
+    if (isExpanded) {
+      collapsePanel(panel, button, body);
+      if (expandedBookGroup === panel) {
+        expandedBookGroup = null;
+      }
+      return;
+    }
+
+    if (expandedBookGroup && expandedBookGroup !== panel) {
+      const activeButton = expandedBookGroup.querySelector(".panel-toggle");
+      const activeBody = expandedBookGroup.querySelector(".panel-body");
+      collapsePanel(expandedBookGroup, activeButton, activeBody);
+    }
+
+    expandPanel(panel, button, body);
+    expandedBookGroup = panel;
+  });
+}
+
 function setupCollapsibleCard(panel, button, body) {
   button.addEventListener("click", () => {
     const isExpanded = panel.classList.contains("is-expanded");
 
     if (isExpanded) {
-      collapsePodcastCard(panel, button, body);
+      collapsePanel(panel, button, body);
       if (expandedPodcastCard === panel) {
         expandedPodcastCard = null;
       }
@@ -234,15 +338,15 @@ function setupCollapsibleCard(panel, button, body) {
     if (expandedPodcastCard && expandedPodcastCard !== panel) {
       const activeButton = expandedPodcastCard.querySelector(".panel-toggle");
       const activeBody = expandedPodcastCard.querySelector(".panel-body");
-      collapsePodcastCard(expandedPodcastCard, activeButton, activeBody);
+      collapsePanel(expandedPodcastCard, activeButton, activeBody);
     }
 
-    expandPodcastCard(panel, button, body);
+    expandPanel(panel, button, body);
     expandedPodcastCard = panel;
   });
 }
 
-function expandPodcastCard(panel, button, body) {
+function expandPanel(panel, button, body) {
   panel.classList.add("is-expanded");
   button.setAttribute("aria-expanded", "true");
   body.hidden = false;
@@ -258,7 +362,7 @@ function expandPodcastCard(panel, button, body) {
   body.addEventListener("transitionend", onExpandEnd);
 }
 
-function collapsePodcastCard(panel, button, body) {
+function collapsePanel(panel, button, body) {
   panel.classList.remove("is-expanded");
   button.setAttribute("aria-expanded", "false");
 
@@ -369,10 +473,19 @@ function buildPanelHead({ title, subtitle, imageUrl, fallbackText, collapsible }
 
   const text = document.createElement("div");
   text.className = "panel-head-copy";
-  text.innerHTML = `
-    <h3 class="panel-title">${escapeHtml(title)}</h3>
-    <p class="panel-copy">${escapeHtml(subtitle)}</p>
-  `;
+
+  const titleEl = document.createElement("h3");
+  titleEl.className = "panel-title";
+  titleEl.textContent = title;
+  text.appendChild(titleEl);
+
+  if (subtitle) {
+    const subtitleEl = document.createElement("p");
+    subtitleEl.className = "panel-copy";
+    subtitleEl.textContent = subtitle;
+    text.appendChild(subtitleEl);
+  }
+
   head.appendChild(text);
 
   if (collapsible) {

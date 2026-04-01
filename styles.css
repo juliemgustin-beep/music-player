@@ -427,3 +427,117 @@ button {
     font-size: 0.74rem;
   }
 }
+
+
+.media-group {
+  display: grid;
+  gap: 8px;
+}
+
+.media-group + .media-group {
+  margin-top: 6px;
+}
+
+.media-group-title {
+  margin: 0;
+  padding: 0 2px;
+  font-size: 0.84rem;
+  color: var(--muted);
+  letter-spacing: 0.01em;
+}
+
+
+body[data-page="kids"] {
+  background:
+    radial-gradient(circle at top, rgba(125, 211, 252, 0.3), transparent 26%),
+    linear-gradient(180deg, #fffdf5 0%, #fef7e8 48%, #f7fbff 100%);
+  color: #19324a;
+}
+
+body[data-page="kids"] .eyebrow {
+  color: #0f766e;
+}
+
+body[data-page="kids"] .hero-copy,
+body[data-page="kids"] .section-header p,
+body[data-page="kids"] .panel-copy,
+body[data-page="kids"] .back-link,
+body[data-page="kids"] .media-group-title,
+body[data-page="kids"] .state-card,
+body[data-page="kids"] .nav-copy span,
+body[data-page="kids"] .playlist-copy span,
+body[data-page="kids"] .tap-copy span {
+  color: #587187;
+}
+
+body[data-page="kids"] .panel,
+body[data-page="kids"] .state-card,
+body[data-page="kids"] .nav-card {
+  background: rgba(255, 255, 255, 0.78);
+  border-color: rgba(147, 197, 253, 0.45);
+  box-shadow: 0 16px 30px rgba(64, 120, 171, 0.12);
+}
+
+body[data-page="kids"] .panel-kids {
+  background: rgba(255, 255, 255, 0.88);
+}
+
+body[data-page="kids"] .panel-collapsible.is-expanded {
+  border-color: rgba(59, 130, 246, 0.35);
+}
+
+body[data-page="kids"] .panel-toggle:focus-visible,
+body[data-page="kids"] .playlist-link:hover,
+body[data-page="kids"] .playlist-link:focus-visible,
+body[data-page="kids"] .back-link:focus-visible {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: rgba(59, 130, 246, 0.28);
+}
+
+body[data-page="kids"] .chevron {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+body[data-page="kids"] .panel-collapsible.is-expanded .chevron {
+  background: rgba(251, 191, 36, 0.2);
+  color: #d97706;
+}
+
+body[data-page="kids"] .artwork {
+  background: linear-gradient(135deg, rgba(125, 211, 252, 0.75), rgba(254, 240, 138, 0.7));
+  color: #1d4ed8;
+}
+
+body[data-page="kids"] .playlist-link,
+body[data-page="kids"] .book-link,
+body[data-page="kids"] .tap-card {
+  background: rgba(247, 250, 255, 0.92);
+  border-color: rgba(191, 219, 254, 0.75);
+}
+
+body[data-page="kids"] .arrow {
+  color: #2563eb;
+}
+
+.media-group-grid {
+  padding: 0 14px 14px;
+}
+
+.book-link {
+  min-height: 0;
+}
+
+.book-link .playlist-copy strong {
+  font-size: 0.88rem;
+}
+
+
+body[data-page="kids"] .artwork.placeholder {
+  display: none;
+}
+
+body[data-page="kids"] .panel-head,
+body[data-page="kids"] .panel-head-collapsible {
+  min-height: 0;
+}
